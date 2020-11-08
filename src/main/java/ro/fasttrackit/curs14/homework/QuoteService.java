@@ -3,39 +3,41 @@ package ro.fasttrackit.curs14.homework;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 import java.util.Scanner;
 
 public class QuoteService {
-    private final List<Quote> bookQuote = getBookQuote();
+    private final List<Quote> quotes = getQuotes();
 
     public QuoteService() throws Exception {
     }
 
-    public List<Quote> getBookQuote() throws Exception {
+    public List<Quote> getQuotes() throws Exception {
         List<Quote> result = new ArrayList<>();
         File file = new File("files/quotes.txt");
         Scanner scan = new Scanner(file);
+        int i = 0;
         while (scan.hasNextLine()) {
-            int i = 0;
             String str = scan.nextLine();
             String[] parts = str.split("~");
-            result.add(new Quote(i++, parts[0], parts[1], false));
+            result.add(new Quote(i, parts[0], parts[1], false));
+            i++;
         }
         scan.close();
         return result;
     }
 
-    public List<String> getAllQuotes() throws Exception {
+    public List<String> getAllQuotes() {
         List<String> result = new ArrayList<>();
-        for(Quote quote : bookQuote){
+        for (Quote quote : quotes) {
             result.add(quote.getQuote());
         }
         return result;
     }
 
-    public List<Quote> getQuotesForAuthor(String author) throws Exception {
+    public List<Quote> getQuotesForAuthor(String author) {
         List<Quote> result = new ArrayList<>();
-        for (Quote quote : bookQuote) {
+        for (Quote quote : quotes) {
             if (quote.getAuthor().equals(author)) {
                 result.add(quote);
             }
@@ -45,30 +47,38 @@ public class QuoteService {
 
     public List<String> getAuthors() {
         List<String> result = new ArrayList<>();
-        for(Quote quote : bookQuote){
+        for (Quote quote : quotes) {
             result.add(quote.getAuthor());
         }
         return result;
     }
 
     public void setFavourites(int id) {
-        for (int i = 0; i<bookQuote.size(); i++){
-            if (bookQuote.get(i).getId() == id){
-                bookQuote.get(i).setFavourite(true);
-                System.out.println(i + " " + true);
+        for (Quote quote : quotes) {
+            if (quote.getId() == id) {
+                quote.setFavourite(true);
             }
         }
     }
 
-    public List<Quote> getFavourites(){
+    public List<Quote> getFavourites() {
         List<Quote> result = new ArrayList<>();
-
+        for (Quote quote : quotes) {
+            if (quote.isFavourite()) {
+                result.add(quote);
+            }
+        }
         return result;
     }
 
-    public String getRandomQuote(){
-        String result = null;
-
-        return result;
+    public String getRandomQuote() {
+        Random rand = new Random();
+        int randomId = rand.nextInt(quotes.size());
+        for (Quote quote : quotes) {
+            if (quote.getId() == randomId) {
+                return quote.getQuote();
+            }
+        }
+        return null;
     }
 }
