@@ -33,4 +33,8 @@ public class Quote {
         this.favourite = favourite;
     }
 
+    @Override
+    public String toString() {
+        return "ID: " + id + ", author: " + author + ", quote: " + quote + ", favourite: " + favourite;
+    }
 }
